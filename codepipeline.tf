@@ -198,44 +198,28 @@ resource "aws_codepipeline" "inventory-codepipeline" {
     type     = "S3"
   }
 
-  # Disabled until we can sort out how to pass oauth.  This will need to be created manually.
-  # stage {
-  #   name = "Source"
-  #
-  #   action {
-  #     name     = "Source"
-  #     category = "Source"
-  #     owner    = "ThirdParty"
-  #     provider = "GitHub"
-  #     version  = "1"
-  #
-  #     output_artifacts = ["source"]
-  #
-  #     configuration {
-  #       Owner  = "PolarGeospatialCenter"
-  #       Repo   = "inventory"
-  #       Branch = "${var.branch}"
-  #     }
-  #   }
-  # }
-
   stage {
-    name = "FakeSource"
+    name = "Source"
 
     action {
-      name             = "S3Source"
-      category         = "Source"
-      owner            = "AWS"
-      provider         = "S3"
+      name     = "Source"
+      category = "Source"
+      owner    = "ThirdParty"
+      provider = "GitHub"
+      version  = "1"
+
       output_artifacts = ["source"]
-      version          = "1"
 
       configuration {
-        S3Bucket    = "${aws_s3_bucket.inventory-codepipeline-artifacts.id}"
-        S3ObjectKey = "source.zip"
+        Owner                = "PolarGeospatialCenter"
+        Repo                 = "inventory"
+        Branch               = "${var.branch}"
+        OAuthToken           = "${var.github_token}"
+        PollForSourceChanges = "true"
       }
     }
   }
+
   stage {
     name = "Build"
 
@@ -253,6 +237,7 @@ resource "aws_codepipeline" "inventory-codepipeline" {
       }
     }
   }
+
   stage {
     name = "Deploy"
 
