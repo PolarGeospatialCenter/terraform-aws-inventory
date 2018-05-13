@@ -57,6 +57,7 @@ resource "aws_iam_role_policy" "inventory-codepipeline-policy" {
         "cloudformation:DescribeChangeSet",
         "cloudformation:CreateChangeSet",
         "cloudformation:DeleteChangeSet",
+        "cloudformation:ExecuteChangeSet",
         "cloudformation:DescribeStacks"
       ],
       "Resource": [
@@ -113,7 +114,8 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
       ],
       "Resource": [
         "${aws_s3_bucket.inventory-codepipeline-artifacts.arn}",
-        "${aws_s3_bucket.inventory-codepipeline-artifacts.arn}/*"
+        "${aws_s3_bucket.inventory-codepipeline-artifacts.arn}/*",
+        "${aws_s3_bucket.inventory-build-lambda-artifacts.arn}*"
       ]
     },
     {
@@ -124,6 +126,62 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
       ],
       "Resource": [
         "arn:aws:cloudformation:${data.aws_region.current.name}:aws:transform/Serverless-2016-10-31"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PassRole"
+      ],
+      "Resource": [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.stack_name}-*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:DescribeTable",
+        "dynamodb:DeleteTable",
+        "dynamodb:CreateTable"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "lambda:*"
+      ],
+      "Resource": [
+        "arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:${var.stack_name}-*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:*"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:GET",
+        "apigateway:POST",
+        "apigateway:PATCH",
+        "apigateway:DELETE"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:${data.aws_region.current.name}::/restapis",
+        "arn:aws:apigateway:${data.aws_region.current.name}::/restapis/*"
       ]
     }
   ]
