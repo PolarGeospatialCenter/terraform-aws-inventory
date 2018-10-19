@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "inventory_build_cache" {
-  bucket_prefix = "inventory-build-cache-"
+  bucket = "${var.cache_bucket_name}"
   force_destroy = true
 }
 
@@ -90,13 +90,14 @@ resource "aws_codebuild_project" "inventory-build-project" {
   build_timeout = "5"
   service_role  = "${aws_iam_role.inventory-codebuild-role.arn}"
 
+
   artifacts {
     type = "CODEPIPELINE"
   }
 
   cache {
     type     = "S3"
-    location = "${aws_s3_bucket.inventory_build_cache.id}/cache"
+    location = "${var.cache_bucket_name}/cache"
   }
 
   environment {
