@@ -71,6 +71,8 @@ resource "aws_api_gateway_domain_name" "inventory" {
   }
 }
 
+#TODO: ADD PATH MAPPING
+
 // Route53 Setup
 resource "aws_route53_record" "inventory" {
   count = "${length(local.api_gateway_ids)}"
