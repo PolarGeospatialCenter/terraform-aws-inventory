@@ -28,6 +28,7 @@ resource "aws_iam_policy" "inventory-api-policy" {
             ],
             "Resource": [
                 "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${local.api_gateway_ids[count.index]}/v0/GET/*",
+                "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${local.api_gateway_ids[count.index]}/v0/PUT/*",
                 "arn:aws:execute-api:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${local.api_gateway_ids[count.index]}/v0/POST/*"
             ]
         }
