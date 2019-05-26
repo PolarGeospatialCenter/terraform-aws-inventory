@@ -176,6 +176,7 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
       "Action": [
         "apigateway:GET",
         "apigateway:POST",
+        "apigateway:PUT",
         "apigateway:PATCH",
         "apigateway:DELETE"
       ],
