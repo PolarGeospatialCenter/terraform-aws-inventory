@@ -102,7 +102,7 @@ resource "aws_codebuild_project" "inventory-build-project" {
 
   environment {
     compute_type = "BUILD_GENERAL1_SMALL"
-    image        = "aws/codebuild/golang:1.10"
+    image        = "aws/codebuild/golang:1.12"
     type         = "LINUX_CONTAINER"
 
     environment_variable {
