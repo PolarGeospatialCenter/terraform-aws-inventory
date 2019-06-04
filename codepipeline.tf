@@ -146,6 +146,7 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
       "Effect": "Allow",
       "Action": [
         "dynamodb:DescribeTable",
+        "dynamodb:UpdateTable",
         "dynamodb:DeleteTable",
         "dynamodb:CreateTable"
       ],
