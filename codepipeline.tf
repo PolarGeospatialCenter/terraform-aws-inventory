@@ -157,12 +157,20 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "dynamodb:CreateTopic",
-        "dynamodb:DeleteTopic",
-        "dynamodb:ListTopics"
+        "sns:CreateTopic",
+        "sns:DeleteTopic"
       ],
       "Resource": [
         "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:inventory_*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sns:ListTopics"
+      ],
+      "Resource": [
+        "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:*"
       ]
     },
     {
