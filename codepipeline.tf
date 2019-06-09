@@ -158,7 +158,8 @@ resource "aws_iam_role_policy" "inventory-codepipeline-cloudformation-policy" {
       "Effect": "Allow",
       "Action": [
         "sns:CreateTopic",
-        "sns:DeleteTopic"
+        "sns:DeleteTopic",
+        "sns:GetTopicAttributes"
       ],
       "Resource": [
         "arn:aws:sns:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:inventory_*"
